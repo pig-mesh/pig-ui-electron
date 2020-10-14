@@ -4,7 +4,8 @@ import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-
+const parseArgs = require('minimist')
+const args = parseArgs(process.argv.slice(1), {string: ['url']})
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -26,15 +27,20 @@ function createWindow() {
       webSecurity: false
     }
   })
-
+  let url = args.url
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
-    createProtocol('app')
-    // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    if(url) {
+      console.log(`load form url ${url}`)
+      win.loadURL(url)
+    } else {
+      createProtocol('app')
+      // Load the index.html when not in development
+      win.loadURL('app://./index.html')
+    }
   }
 
   win.on('closed', () => {

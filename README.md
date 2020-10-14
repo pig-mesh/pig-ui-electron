@@ -42,6 +42,9 @@ yarn electron:build:uat
 yarn electron:build:prod
 ```
 
+### 命令行参数
+
+`--url ${URL}` 以外部URL启动,比如 `pig-ui.exe --url  https://pigx.pig4cloud.com/` 一般用于测试。
 
 ### 效果演示
 
